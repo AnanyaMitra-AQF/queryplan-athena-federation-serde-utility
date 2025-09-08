@@ -1,0 +1,92 @@
+{
+    "relations": [
+        {
+            "root": {
+                "input": {
+                    "fetch": {
+                        "common": {
+                            "direct": {}
+                        },
+                        "input": {
+                            "sort": {
+                                "common": {
+                                    "direct": {}
+                                },
+                                "input": {
+                                    "project": {
+                                        "common": {
+                                            "emit": {
+                                                "outputMapping": [
+                                                    2,
+                                                    3
+                                                ]
+                                            }
+                                        },
+                                        "input": {
+                                            "read": {
+                                                "common": {
+                                                    "direct": {}
+                                                },
+                                                "baseSchema": {
+                                                    "names": [
+                                                        "NAME",
+                                                        "COLOR"
+                                                    ],
+                                                    "struct": {
+                                                        "types": [
+                                                            {
+                                                                "string": {
+                                                                    "nullability": "NULLABILITY_NULLABLE"
+                                                                }
+                                                            },
+                                                            {
+                                                                "string": {
+                                                                    "nullability": "NULLABILITY_NULLABLE"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "nullability": "NULLABILITY_REQUIRED"
+                                                    }
+                                                },
+                                                "namedTable": {
+                                                    "names": [
+                                                        "FRUIT"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "expressions": [
+                                            {
+                                                "selection": {
+                                                    "directReference": {
+                                                        "structField": {}
+                                                    },
+                                                    "rootReference": {}
+                                                }
+                                            },
+                                            {
+                                                "selection": {
+                                                    "directReference": {
+                                                        "structField": {
+                                                            "field": 1
+                                                        }
+                                                    },
+                                                    "rootReference": {}
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "count": "100"
+                    }
+                },
+                "names": [
+                    "NAME",
+                    "COLOR"
+                ]
+            }
+        }
+    ]
+}

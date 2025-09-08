@@ -1,0 +1,53 @@
+<!--<project xmlns="http://maven.apache.org/POM/4.0.0"-->
+<!--         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0-->
+<!--                             http://maven.apache.org/xsd/maven-4.0.0.xsd">-->
+<!--    <modelVersion>4.0.0</modelVersion>-->
+<!--    <groupId>com.example</groupId>-->
+<!--    <artifactId>substrait-athena-utils</artifactId>-->
+<!--    <version>1.0.0</version>-->
+<!--    <dependencies>-->
+<!--        &lt;!&ndash; Substrait Isthmus &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.substrait</groupId>-->
+<!--            <artifactId>isthmus</artifactId>-->
+<!--            <version>0.41.0</version> &lt;!&ndash; Replace with correct version &ndash;&gt;-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; Jackson YAML Support &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.dataformat</groupId>-->
+<!--            <artifactId>jackson-dataformat-yaml</artifactId>-->
+<!--            <version>2.20.0</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; Google Protobuf &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.google.protobuf</groupId>-->
+<!--            <artifactId>protobuf-java</artifactId>-->
+<!--            <version>4.31.1</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; Additional dependencies if needed &ndash;&gt;-->
+<!--        &lt;!&ndash; Example: Commons Math, Calcite Link4j, etc., will come transitively &ndash;&gt;-->
+<!--    </dependencies>-->
+<!--</project>-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>athena-federation-sdk-deps</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-athena-federation-sdk</artifactId>
+            <version>2022.47.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.arrow</groupId>
+            <artifactId>arrow-vector</artifactId>
+            <version>18.1.0</version>
+        </dependency>
+    </dependencies>
+</project>
