@@ -1,18 +1,10 @@
 import base64
+from typing import List
 import jpype
 from jpype.types import JByte
-from typing import List
-import sys
-
+from pathlib import Path
 
 def block_to_record_strings(block) -> List[str]:
-    """
-    Converts all rows in a Block to a list of human-readable strings.
-    Parameters:
-        block: com.amazonaws.athena.connector.lambda.data.Block Java object
-    Returns:
-        List of string representations of each row in the block.
-    """
     result = []
     row_count = block.getRowCount()
     BlockUtils = jpype.JClass('com.amazonaws.athena.connector.lambda.data.BlockUtils')
@@ -23,22 +15,42 @@ def block_to_record_strings(block) -> List[str]:
 
 
 if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 3:
+        print("Usage: python decode_block.py <base64_schema_string> <base64_records_string>")
+        exit(1)
+
+    base64_schema = sys.argv[1]
+    base64_records = sys.argv[2]
+
     if not jpype.isJVMStarted():
-        jpype.startJVM(classpath=["jars/*"])
-    base64_block = "3AAAABQAAAAAAAAADAAWAA4AFQAQAAQADAAAAEgAAAAAAAAAAAADABAAAAAAAwoAGAAMAAgABAAKAAAAFAAAAHgAAAACAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAABAAAAAAAAAAgAAAAAAAAADAAAAAAAAAAYAAAAAAAAAAYAAAAAAAAAIAAAAAAAAAABAAAAAAAAACgAAAAAAAAADAAAAAAAAAA4AAAAAAAAAA8AAAAAAAAAAAAAAAIAAAACAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAADAAAABgAAAAAAAAByZWRyZWQAAAMAAAAAAAAAAAAAAAUAAAAPAAAAAAAAAGFwcGxlc3RyYXdiZXJyeQA="
-    # Deserialize the block from base64 to Java Block object
+        jpype.startJVM("--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED",
+                       "-Darrow.memory.allow-unsafe=true", "-XX:MaxDirectMemorySize=512m", classpath=["jars/*"])
+
+    schema_bytes = base64.b64decode(base64_schema)
+    records_bytes = base64.b64decode(base64_records)
+
+    java_bytes_schema = jpype.JArray(JByte)(schema_bytes)
+
+    # Step 1: Deserialize Schema
+    ByteBuffer = jpype.JClass('java.nio.ByteBuffer')
+    schema_buffer = ByteBuffer.wrap(java_bytes_schema)
+    ArrowSchemaClass = jpype.JClass('org.apache.arrow.vector.types.pojo.Schema')
+    schema_obj = ArrowSchemaClass.deserialize(schema_buffer)
+
+    # Step 2: Create Block (Empty for now)
+    BlockAllocatorImpl = jpype.JClass('com.amazonaws.athena.connector.lambda.data.BlockAllocatorImpl')
+    allocator = BlockAllocatorImpl()
+    block_obj = allocator.createBlock(schema_obj)
+
+    # Step 3: Manually parse records_bytes and populate Block
     BlockUtils = jpype.JClass('com.amazonaws.athena.connector.lambda.data.BlockUtils')
-    Block = jpype.JClass('com.amazonaws.athena.connector.lambda.data.Block')
-    # Decode base64 to bytes
-    block_bytes = base64.b64decode(base64_block)
-    # Convert Python bytes to Java byte[]
-    java_bytes = jpype.JArray(JByte)(block_bytes)
-    # Deserialize block
-    block_obj = BlockUtils.fromBytes(java_bytes)
-    # Convert block to list of human-readable strings
+    FieldResolver = jpype.JClass('com.amazonaws.athena.connector.lambda.data.FieldResolver')
+    field_resolver = FieldResolver()
+
+    # Step 4: Extract human-readable records
     records = block_to_record_strings(block_obj)
-    # Print each record
     for rec in records:
         print(rec)
-    # Shutdown JVM
+
     jpype.shutdownJVM()
