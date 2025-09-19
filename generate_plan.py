@@ -34,6 +34,7 @@ if __name__ == "__main__":
     sql_to_substrait = SqlToSubstrait()
     java_sql_string = JString(query)
     plan_proto = sql_to_substrait.execute(java_sql_string, java_arraylist)
+    print(plan_proto)
     # Step 4: Serialize Protobuf Plan to Base64
     plan_bytes = plan_proto.toByteArray()
     base64_plan = base64.b64encode(plan_bytes).decode("utf-8")

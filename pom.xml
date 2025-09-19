@@ -61,5 +61,30 @@
             <artifactId>arrow-vector</artifactId>
             <version>18.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.substrait</groupId>
+            <artifactId>isthmus</artifactId>
+            <version>0.64.0</version> <!-- Replace with correct version -->
+        </dependency>
+        <dependency>
+            <groupId>io.substrait</groupId>
+            <artifactId>core</artifactId>
+            <version>0.64.0</version> <!-- Replace with correct version -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-core</artifactId>
+            <version>1.40.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.calcite.avatica</groupId>
+            <artifactId>avatica-core</artifactId>
+            <version>1.26.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-linq4j</artifactId>
+            <version>1.40.0</version>
+        </dependency>
     </dependencies>
 </project>
