@@ -6,6 +6,9 @@ A Python utility to generate **Substrait plans** from table schemas for AWS Athe
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
 * [Usage](#usage)
+    * [Substrait Plan Generator](#substrait-plan-generator)
+    * [Block Parser](#block-parser)
+
 ---
 ## Features
 * Generate Substrait plans from table schema and an SQL query for Athena connectors.
@@ -29,22 +32,49 @@ pip install -r requirements.txt
 ```
 ---
 ## Usage
-
-## Configuration
-Schema file format example(schema.sql):
+### Substrait Plan Generator
+Generate plans from SQL queries against schemas.
+**Schema file format example (`schema.sql`):**
 ```sql
 CREATE TABLE fruit (
-name VARCHAR,
-color VARCHAR
+    name VARCHAR,
+    color VARCHAR
 );
 ```
-
----
-## Example usage from terminal
-Generate a plan as per your SQL query:
+**Run:**
 ```bash
-python generate_plan.py "SELECT * FROM fruit limit 20"
+python generate_plan.py "SELECT * FROM fruit WHERE color = 'red' limit 20"
 ```
-This will print the substrait plan generated into your terminal.
-
-Note: Substrait expression for your query and schema will be available in _Isthmus_substrait.json_. 
+This will print the Plan object and Substrait plan in your terminal.
+---
+### Block Parser
+The **Block Parser utility** converts Athena `ReadRecordResponse Block` dumps into row-wise human-readable records and diffs.
+**Input files :**
+* `mainline_block.txt` → Mainline code Block dump
+* `updated_block.txt` → Updated code Block dump
+  **Outputs:**
+* `mainline_records.txt` → Parsed row strings from mainline
+* `updated_records.txt` → Parsed row strings from updated code
+* `diff_records.txt` → Row-by-row differences
+  **Run:**
+```bash
+python parse_block.py
+```
+**Example Block input:**
+```
+Block{rows=3, id=[1,2,3], name=[Alice,Bob,Charlie], active=[true,false,true]}
+```
+**Parsed output (`mainline_records.txt` and `updated_records.txt`):**
+```
+[id : 1], [name : Alice], [active : true]
+[id : 2], [name : Bob], [active : false]
+[id : 3], [name : Charlie], [active : true]
+```
+**Diff output (`diff_records.txt`):**
+```
+Row 1:
+  Mainline: [id : 2], [name : Bob], [active : false]
+  Updated : [id : 2], [name : Bobby], [active : true]
+```
+---
+Outputs will be written to `mainline_records.txt`, `updated_records.txt`, and `diff_records.txt`.
